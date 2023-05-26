@@ -13,6 +13,7 @@ import { nanoid } from 'nanoid';
 class App extends Component {
   state = {
     contacts: [],
+    filter: '',
     name: '',
     number: '',
   };
@@ -26,6 +27,10 @@ class App extends Component {
     });
     this.setState({
       [event.currentTarget.number]: event.currentTarget.value,
+    });
+
+    this.setState({
+      [event.currentTarget.filter]: event.currentTarget.value,
     });
   };
 
@@ -81,6 +86,15 @@ class App extends Component {
         </FormContainer>
 
         <Title>Contacts</Title>
+
+        <p>Find contacts by name</p>
+
+        <Input
+          onChange={this.handleChange}
+          type="text"
+          name="filter"
+          value={this.state.filter}
+        />
 
         <ul>
           {this.state.contacts.map(contact => (
