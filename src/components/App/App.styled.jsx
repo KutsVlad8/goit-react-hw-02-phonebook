@@ -5,7 +5,7 @@ padding: 20px;
 
 `;
 
-export const Title = Styled.h1`
+export const Title = Styled.h2`
 
 `;
 
