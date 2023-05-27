@@ -1,4 +1,7 @@
 import { Component } from 'react';
+import Filter from 'components/Filter/Filter';
+import ContactsList from '../ContactsList/ContactsList';
+
 import {
   Container,
   Title,
@@ -12,7 +15,12 @@ import { nanoid } from 'nanoid';
 
 class App extends Component {
   state = {
-    contacts: [],
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
     filter: '',
     name: '',
     number: '',
@@ -22,15 +30,9 @@ class App extends Component {
   nameInputNumberId = nanoid(2);
 
   handleChange = event => {
+    const { name, value } = event.currentTarget;
     this.setState({
-      [event.currentTarget.name]: event.currentTarget.value,
-    });
-    this.setState({
-      [event.currentTarget.number]: event.currentTarget.value,
-    });
-
-    this.setState({
-      [event.currentTarget.filter]: event.currentTarget.value,
+      [name]: value,
     });
   };
 
@@ -50,7 +52,22 @@ class App extends Component {
     this.setState({ name: '', number: '' });
   };
 
+  changeFilter = event => {
+    this.setState({ filter: event.currentTarget.value });
+  };
+
+  getVisibleContacts = () => {
+    const { filter, contacts } = this.state;
+    const normalizeFilter = filter.toLowerCase();
+
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizeFilter)
+    );
+  };
+
   render() {
+    const visibleContacts = this.getVisibleContacts();
+
     return (
       <Container>
         <Title>PhoneBook</Title>
@@ -87,22 +104,9 @@ class App extends Component {
 
         <Title>Contacts</Title>
 
-        <p>Find contacts by name</p>
+        <Filter value={this.state.filter} onChange={this.changeFilter} />
 
-        <Input
-          onChange={this.handleChange}
-          type="text"
-          name="filter"
-          value={this.state.filter}
-        />
-
-        <ul>
-          {this.state.contacts.map(contact => (
-            <li key={contact.id}>
-              {contact.name}: {contact.number}
-            </li>
-          ))}
-        </ul>
+        <ContactsList visibleContacts={visibleContacts} />
       </Container>
     );
   }
