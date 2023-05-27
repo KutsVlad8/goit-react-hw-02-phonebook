@@ -1,16 +1,8 @@
 import { Component } from 'react';
 import Filter from 'components/Filter/Filter';
 import ContactsList from '../ContactsList/ContactsList';
-
-import {
-  Container,
-  Title,
-  FormContainer,
-  Form,
-  Label,
-  Input,
-  Button,
-} from './App.styled';
+import ContactForm from '../ContactForm/ContactForm';
+import { Container, Title, FormContainer } from './App.styled';
 import { nanoid } from 'nanoid';
 
 class App extends Component {
@@ -22,34 +14,15 @@ class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  nameInputNameId = nanoid(2);
-  nameInputNumberId = nanoid(2);
-
-  handleChange = event => {
-    const { name, value } = event.currentTarget;
-    this.setState({
-      [name]: value,
-    });
-  };
-
-  handleSubmit = event => {
+  formSubmitHandler = data => {
     const contact = {
       id: nanoid(2),
-      name: this.state.name,
-      number: this.state.number,
+      ...data,
     };
 
-    event.preventDefault();
     this.state.contacts.push(contact);
-    this.resetForm();
-  };
-
-  resetForm = () => {
-    this.setState({ name: '', number: '' });
   };
 
   changeFilter = event => {
@@ -73,33 +46,7 @@ class App extends Component {
         <Title>PhoneBook</Title>
 
         <FormContainer>
-          <Form onSubmit={this.handleSubmit}>
-            <Label htmlFor={this.nameInputNameId}>Name</Label>
-            <Input
-              id={this.nameInputNameId}
-              onChange={this.handleChange}
-              type="text"
-              name="name"
-              value={this.state.name}
-              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              required
-            />
-
-            <Label htmlFor={this.nameInputNumberId}>Number</Label>
-            <Input
-              id={this.nameInputNumberId}
-              onChange={this.handleChange}
-              type="text"
-              name="number"
-              value={this.state.number}
-              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-              required
-            />
-
-            <Button type="submit">add contact</Button>
-          </Form>
+          <ContactForm onSubmit={this.formSubmitHandler} />
         </FormContainer>
 
         <Title>Contacts</Title>

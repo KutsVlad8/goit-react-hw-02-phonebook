@@ -1,10 +1,30 @@
 import { Component } from 'react';
-import { Form, Label, Input, Button } from './App.styled';
+import { nanoid } from 'nanoid';
+import { Form, Label, Input, Button } from './ContactForm.styled';
 
 class ContactForm extends Component {
   state = {
     name: '',
     number: '',
+  };
+
+  nameInputNameId = nanoid(2);
+  nameInputNumberId = nanoid(2);
+
+  handleChange = event => {
+    const { name, value } = event.currentTarget;
+    this.setState({ [name]: value });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    this.props.onSubmit(this.state);
+    this.resetForm();
+  };
+
+  resetForm = () => {
+    this.setState({ name: '', number: '' });
   };
 
   render() {
