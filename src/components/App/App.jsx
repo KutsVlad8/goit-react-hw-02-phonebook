@@ -17,12 +17,25 @@ class App extends Component {
   };
 
   formSubmitHandler = data => {
-    const contact = {
-      id: nanoid(2),
-      ...data,
-    };
+    const oldContact = this.state.contacts.map(oldContact =>
+      oldContact.name.toLowerCase()
+    );
 
-    this.state.contacts.push(contact);
+    if (oldContact.includes(data.name.toLowerCase())) {
+      return alert(`${data.name} is alredy in contacts`);
+    }
+
+    const newContact = { id: nanoid(2), ...data };
+
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, newContact],
+    }));
+  };
+
+  deleteContact = contactId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+    }));
   };
 
   changeFilter = event => {
@@ -53,7 +66,10 @@ class App extends Component {
 
         <Filter value={this.state.filter} onChange={this.changeFilter} />
 
-        <ContactsList visibleContacts={visibleContacts} />
+        <ContactsList
+          visibleContacts={visibleContacts}
+          onDelete={this.deleteContact}
+        />
       </Container>
     );
   }

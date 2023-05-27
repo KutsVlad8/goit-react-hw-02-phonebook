@@ -20,4 +20,5 @@ margin-bottom: 10px;
 export const Button = Styled.button`
 display: block;
 width: 100px;
+cursor: pointer;
 `;
